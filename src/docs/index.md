@@ -19,7 +19,7 @@ title: Akka.NET Documentation
 	- [Azure PaaS Worker Role](deployment-scenarios/Azure PaaS Worker Role)
 - [Examples of use-cases for Akka](Examples of use cases for Akka)
 
-## Akka.NET Concepts
+## General
 - [Terminology, Concepts](concepts/terminology)
 - [Actor Systems](concepts/actorsystem)
 - [What is an Actor?](concepts/actors)
@@ -32,12 +32,9 @@ title: Akka.NET Documentation
 - [Configuration](concepts/configuration)
     - [HOCON](concepts/hocon)
 
-### Working with Actors
+### Actors
 - [Creating your first Actor](working-with-actors/creating-actors)
 - [Defining an Actor class](working-with-actors/defining-an-actor)
-- [What's in an Actor](working-with-actors/whats-in-an-actor)
-- [Creating actors with Props](working-with-actors/creating-actors-with-props)
-- [Handling Messages](working-with-actors/handling-messages)
 - [Sending Messages](working-with-actors/sending-messages)
 - [Actor lifecycle](working-with-actors/Actor lifecycle)
 - [Dispatchers](working-with-actors/Dispatchers)
@@ -45,18 +42,18 @@ title: Akka.NET Documentation
 - [Switchable Behaviors](working-with-actors/Switchable Behaviors)
 - [Stashing Messages](working-with-actors/Stashing Messages)
 - [Stopping Actors](working-with-actors/stopping-actors)
-
-### Actors
-- [Working with actors](Working with actors)
-- [F# API](FSharp API)
-- [ReceiveActors](ReceiveActor)
-- [Finite State Machines](FSM)
-- [Persistence](Persistence)
-- [Fault Tolerance](Fault tolerance)
-- [Props](Props)
-- [Receive timeout](Receive timeout)
-- [Dependency injection](Dependency injection)
+- [Working with actors](working-with-actors/Working with actors)
+- [Finite State Machines](working-with-actors/FSM)
+- [Persistence](working-with-actors/Persistence)
+- [Fault Tolerance](working-with-actors/Fault tolerance)
+- [Props](working-with-actors/Props)
+- [Receive timeout](working-with-actors/Receive timeout)
+- [Dependency injection](working-with-actors/Dependency injection)
 - [Routers](working-with-actors/Routers)
+
+### Custom Actors DSL
+- [F# API](FSharp API)
+- [Receive Actors](ReceiveActor)
 
 ### Akka.Remote
 - [Akka.Remote Overview](remoting/)
