@@ -11,7 +11,7 @@ Event Adapters help in situations where:
 - **Separating Domain and Data models** – thanks to EventAdapters it is possible to completely separate the domain model from the model used to persist data in the Journals. For example one may want to use case classes in the domain model, however persist their protocol-buffer (or any other binary serialization format) counter-parts to the Journal. A simple `ToJournal:MyModel=>MyDataModel` and `FromJournal:MyDataModel=>MyModel` adapter can be used to implement this feature.
 - **Journal Specialized Data Types** – exposing data types understood by the underlying Journal, for example for data stores which understand JSON it is possible to write an EventAdapter `ToJournal:object=>JSON` such that the Journal can directly store the json instead of serializing the object to its binary representation.
 
-```C#
+```csharp
 public class MyEventAdapter : IEventAdapter
 {
     public string Manifest(object evt)

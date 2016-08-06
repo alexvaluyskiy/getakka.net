@@ -44,13 +44,13 @@ For more information see [What Restarting Means](Supervision#what-restarting-mea
 
 There are cases when it is impossible to pass all the information needed for actor initialization in the constructor, for example in the presence of circular dependencies. In this case the actor should listen for an initialization message, and use `Become()` or a finite state-machine state transition to encode the initialized and uninitialized states of the actor.
 ```csharp
-public class Service : UntypedActor
+public class Service : ReceiveActor
 {
     private string _initializeMe;
 
-    protected override void OnReceive(object message)
+    public Service()
     {
-        if (message.Equals("init"))
+        Receive<string>(message => message.Equals("init"), message =>
         {
             _initializeMe = "Up and running";
 
@@ -61,7 +61,7 @@ public class Service : UntypedActor
                     Sender.Tell(_initializeMe, Self);
                 }
             });
-        }
+        });
     }
 }
 ```

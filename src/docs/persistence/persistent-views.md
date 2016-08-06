@@ -31,7 +31,7 @@ akka.persistence.view.auto-update-interval = 5s
 
 `PersistentView` implementation classes may also override the `AutoUpdateInterval` method to return a custom update interval for a specific view class or view instance. Applications may also trigger additional updates at any time by sending a view an Update message.
 
-```C#
+```csharp
 IActorRef view = system.ActorOf<ViewActor>();
 view.Tell(new Update(true));
 ```

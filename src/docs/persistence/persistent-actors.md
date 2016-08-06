@@ -29,7 +29,7 @@ A persistent actor receives a (non-persistent) command which is first validated 
 
 Akka persistence supports event sourcing with the `ReceivePersistentActor` abstract class. An actor that extends this class uses the persist method to persist and handle events. The behavior of an `ReceivePersistentActor` is defined by implementing `Recover` and `Receive` methods. This is demonstrated in the following example.
 
-```C#
+```csharp
 public class Cmd
 {
     public Cmd(string data)
@@ -142,7 +142,7 @@ If persistence of an event fails, `OnPersistFailure` will be invoked (logging th
 ## Identifiers
 A persistent actor must have an identifier that doesn't change across different actor incarnations. The identifier must be defined with the `PersistenceId` method.
 
-```C#
+```csharp
 public override string PersistenceId { get; } = "my-stable-persistence-id";
 ```
 
@@ -154,7 +154,7 @@ By default, a persistent actor is automatically recovered on start and on restar
 ### Recovery customization
 Applications may also customise how recovery is performed by returning a customised `Recovery` object in the recovery method of a `ReceivePersistentActor`, for example setting an upper bound to the replay which allows the actor to be replayed to a certain point "in the past" instead to its most up to date state:
 
-```C#
+```csharp
 public override Recovery Recovery
 {
     get { return new Recovery(new SnapshotSelectionCriteria(457)); }
@@ -163,7 +163,7 @@ public override Recovery Recovery
 
 Recovery can be disabled by returning `SnapshotSelectionCriteria.None` in the recovery property of a PersistentActor:
 
-```C#
+```csharp
 public override Recovery Recovery
 {
     get { return new Recovery(SnapshotSelectionCriteria.None); }
@@ -173,14 +173,14 @@ public override Recovery Recovery
 ### Recovery status
 A persistent actor can query its own recovery status via the methods
 
-```C#
+```csharp
 public bool IsRecovering { get; }
 public bool IsRecoveryFinished { get; }
 ```
 
 Sometimes there is a need for performing additional initialization when the recovery has completed before processing any other message sent to the persistent actor. The persistent actor will receive a special `RecoveryCompleted` message right after recovery and before any other received messages.
 
-```C#
+```csharp
 Recover<RecoveryCompleted>(message =>
 {
     // perform init after recovery, before any other messages
@@ -212,7 +212,7 @@ akka.persistence.internal-stash-overflow-strategy = "akka.persistence.ThrowExcep
 The `DiscardToDeadLetterStrategy` strategy also has a pre-packaged companion configurator `DiscardConfigurator`.
 
 You can also query default strategy via the Akka persistence extension singleton:
-```C#
+```csharp
 Context.System.DefaultInternalStashOverflowStrategy
 ```
 
@@ -228,7 +228,7 @@ In the below example, the event callbacks may be called "at any time", even afte
 
 > NOTE: In order to implement the pattern known as "command sourcing" simply `PersistAsync` all incoming messages right away and handle them in the callback.
 
-```C#
+```csharp
 public class MyPersistentActor : ReceivePersistentActor
 {
     public override string PersistenceId => "HardCoded";
@@ -262,7 +262,7 @@ Sometimes when working with `PersistAsync` you may find that it would be nice to
 
 Using this method is very similar to the persist family of methods, yet it does not persist the passed in event. It will be kept in memory and used when invoking the handler.
 
-```C#
+```csharp
 public class MyPersistentActor : ReceivePersistentActor
 {
     public override string PersistenceId => "HardCoded";
@@ -291,7 +291,7 @@ public class MyPersistentActor : ReceivePersistentActor
 
 Notice that the `Sender` is safe to access in the handler callback, and will be pointing to the original sender of the command for which this `DeferAsync` handler was called.
 
-```C#
+```csharp
 persistentActor.tell("a");
 persistentActor.tell("b");
  
@@ -313,7 +313,7 @@ persistentActor.tell("b");
 It is possible to call `Persist` and `PersistAsync` inside their respective callback blocks and they will properly retain both the thread safety (including the right value of `Sender`) as well as stashing guarantees.
 
 In general it is encouraged to create command handlers which do not need to resort to nested event persisting, however there are situations where it may be useful. It is important to understand the ordering of callback execution in those situations, as well as their implication on the stashing behaviour (that persist enforces). In the following example two persist calls are issued, and each of them issues another persist inside its callback:
-```C#
+```csharp
 public class MyPersistentActor : ReceivePersistentActor
 {
     public override string PersistenceId => "HardCoded";
@@ -343,7 +343,7 @@ public class MyPersistentActor : ReceivePersistentActor
 }
 ```
 When sending two commands to this `PersistentActor`, the persist handlers will be executed in the following order:
-```C#
+```csharp
 persistentActor.tell("a");
 persistentActor.tell("b");
  
@@ -363,7 +363,7 @@ persistentActor.tell("b");
 First the "outer layer" of persist calls is issued and their callbacks are applied. After these have successfully completed, the inner callbacks will be invoked (once the events they are persisting have been confirmed to be persisted by the journal). Only after all these handlers have been successfully invoked will the next command be delivered to the persistent Actor. In other words, the stashing of incoming commands that is guaranteed by initially calling `Persist` on the outer layer is extended until all nested persist callbacks have been handled.
 
 It is also possible to nest `PersistAsync` calls, using the same pattern:
-```C#
+```csharp
 public class MyPersistentActor : ReceivePersistentActor
 {
     public override string PersistenceId => "HardCoded";
@@ -393,7 +393,7 @@ public class MyPersistentActor : ReceivePersistentActor
 }
 ```
 In this case no stashing is happening, yet events are still persisted and callbacks are executed in the expected order:
-```C#
+```csharp
 persistentActor.tell("a");
 persistentActor.tell("b");
  
@@ -419,7 +419,7 @@ While it is possible to nest mixed persist and `PersistAsync` with keeping their
 If persistence of an event fails, `OnPersistFailure` will be invoked (logging the error by default), and the actor will unconditionally be stopped.
 
 The reason that it cannot resume when persist fails is that it is unknown if the event was actually persisted or not, and therefore it is in an inconsistent state. Restarting on persistent failures will most likely fail anyway since the journal is probably unavailable. It is better to stop the actor and after a back-off timeout start it again. The `BackoffSupervisor` actor is provided to support such restarts.
-```C#
+```csharp
 protected override void PreStart()
 {
     var childProps = Props.Create<DocumentPersistentActor>();
@@ -483,7 +483,7 @@ This can be dangerous when used with PersistentActor due to the fact that incomi
 
 The example below highlights how messages arrive in the Actor's mailbox and how they interact with its internal stashing mechanism when `Persist()` is used. Notice the early stop behaviour that occurs when `PoisonPill` is used:
 
-```C#
+```csharp
 public class Shutdown
 {
 }
@@ -521,7 +521,7 @@ public class ShutdownPersistentActor : ReceivePersistentActor
 }
 ```
 
-```C#
+```csharp
 // UN-SAFE, due to PersistentActor's command stashing:
 persistentActor.Tell("a");
 persistentActor.Tell("b");
@@ -535,7 +535,7 @@ persistentActor.Tell(PoisonPill.Instance);
 // Actor is stopped without handling `b` nor the `a` handler!
 ```
 
-```C#
+```csharp
 // SAFE:
 persistentActor.Tell("a");
 persistentActor.Tell("b");

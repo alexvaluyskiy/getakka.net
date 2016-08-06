@@ -26,7 +26,7 @@ If the persistent actor is not currently recovering, the deliver method will sen
 
 Deliver requires a `deliveryMessageMapper` function to pass the provided `deliveryId` into the message so that the correlation between `Deliver` and `ConfirmDelivery` is possible. The `deliveryId` must do the round trip. Upon receipt of the message, the destination actor will send the same `deliveryId` wrapped in a confirmation message back to the sender. The sender will then use it to call the `ConfirmDelivery` method to complete the delivery routine.
 
-```C#
+```csharp
 public class Msg
 {
     public Msg(long deliveryId, string message)

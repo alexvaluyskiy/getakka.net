@@ -8,7 +8,7 @@ Snapshots can dramatically reduce recovery times of persistent actors and views.
 
 Persistent actors can save snapshots of internal state by calling the `SaveSnapshot` method. If saving of a snapshot succeeds, the persistent actor receives a `SaveSnapshotSuccess` message, otherwise a `SaveSnapshotFailure` message.
 
-```C#
+```csharp
 public class DocumentPersistentSnapshotActor : ReceivePersistentActor
 {
     private List<string> _messages = new List<string>();
@@ -46,7 +46,7 @@ public class DocumentPersistentSnapshotActor : ReceivePersistentActor
 
 During recovery, the persistent actor is offered a previously saved snapshot via a `SnapshotOffer` message from which it can initialize internal state.
 
-```C#
+```csharp
 Recover<string>(page =>
 {
     _messages.Add(page);
@@ -62,7 +62,7 @@ The replayed messages that follow the `SnapshotOffer` message, if any, are young
 
 In general, a persistent actor is only offered a snapshot if that persistent actor has previously saved one or more snapshots and at least one of these snapshots matches the `SnapshotSelectionCriteria` that can be specified for recovery.
 
-```C#
+```csharp
 public override Recovery Recovery
 {
     get

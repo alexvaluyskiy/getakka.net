@@ -10,7 +10,7 @@ title: Persistence FSM
 
 To demonstrate the features of the `PersistentFSM` class, consider an actor which represents a Web store customer. The contract of our "`WebStoreCustomerFSMActor`" is that it accepts the following commands:
 
-```C#
+```csharp
 public interface ICommand
 {
 }
@@ -41,7 +41,7 @@ public class GetCurrentCart : ICommand
 `AddItem` sent when the customer adds an item to a shopping cart `Buy` - when the customer finishes the purchase `Leave` - when the customer leaves the store without purchasing anything `GetCurrentCart` allows to query the current state of customer's shopping cart
 
 The customer can be in one of the following states:
-```C#
+```csharp
 public enum UserState
 {
     Shopping,
@@ -54,7 +54,7 @@ public enum UserState
 
 Customer's actions are "recorded" as a sequence of "domain events" which are persisted. Those events are replayed on an actor's start in order to restore the latest customer's state:
 
-```C#
+```csharp
 public interface IDomainEvent
 {
 }
@@ -80,7 +80,7 @@ public class OrderDiscarded : IDomainEvent
 
 Customer state data represents the items in a customer's shopping cart:
 
-```C#
+```csharp
 public class Item
 {
     public Item(string id, string name, double price)
@@ -145,7 +145,7 @@ public class NonEmptyShoppingCart : IShoppingCart
 ```
 
 Side-effects:
-```C#
+```csharp
 internal interface IReportEvent
 {
 }
@@ -160,7 +160,7 @@ internal class ShoppingCardDiscarded : IReportEvent
 ```
 
 Here is how everything is wired together:
-```C#
+```csharp
 StartWith(UserState.LookingAround, new EmptyShoppingCart());
 
 When(UserState.LookingAround, (e, state) =>
@@ -264,7 +264,7 @@ When(UserState.Paid, (e, state) =>
 ```
 > Note: State data can only be modified directly on initialization. Later it's modified only as a result of applying domain events. Override the `ApplyEvent` method to define how state data is affected by domain events, see the example below
 
-```C#
+```csharp
 protected override IShoppingCart ApplyEvent(IDomainEvent e, IShoppingCart data)
 {
     if (e is ItemAdded)

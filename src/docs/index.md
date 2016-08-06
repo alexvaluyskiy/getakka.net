@@ -34,15 +34,14 @@ title: Akka.NET Documentation
 
 ### Working with Actors
 - [Creating actors](working-with-actors/creating-actors)
-- [UntypedActor API](working-with-actors/Actor lifecycle)
-- [ReceiveActor API](ReceiveActor)
+- [UntypedActor API](working-with-actors/untyped-actor-api)
+- [ReceiveActor API](working-with-actors/receive-actor-api)
 - [F# Actor's API](FSharp API)
+- [Actor lifecycle](working-with-actors/Actor lifecycle)
 - [Identifying Actors via Actor Selection](working-with-actors/identifying-actors-via-actor-selection)
 - [Actor messages](working-with-actors/sending-messages)
 - [Receive timeout](Receive timeout)
 - [Stopping Actors](working-with-actors/stopping-actors)
-- [Switchable Behaviors](working-with-actors/Switchable Behaviors)
-- [Stashing Messages](working-with-actors/Stashing Messages)
 - [Initialization patterns](working-with-actors/initialization-patterns)
 
 ### Actors
