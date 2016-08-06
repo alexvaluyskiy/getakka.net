@@ -13,7 +13,7 @@ This module is marked as “experimental” as of its introduction in Akka.Net 1
 ## Design overview
 Akka Persistence Query is purposely designed to be a very loosely specified API. This is in order to keep the provided APIs general enough for each journal implementation to be able to expose its best features, e.g. a SQL journal can use complex SQL queries or if a journal is able to subscribe to a live event stream this should also be possible to expose the same API - a typed stream of events.
 
-Each read journal must explicitly document which types of queries it supports. Refer to your journal's plugins documentation for details on which queries and semantics it supports.
+**Each read journal must explicitly document which types of queries it supports**. Refer to your journal's plugins documentation for details on which queries and semantics it supports.
 
 While Akka Persistence Query does not provide actual implementations of ReadJournals, it defines a number of pre-defined query types for the most common query scenarios, that most journals are likely to implement (however they are not required to).
 
@@ -213,7 +213,7 @@ query
 ```
 
 ## Performance and denormalization
-When building systems using Event sourcing and CQRS (Command & Query Responsibility Segregation) techniques it is tremendously important to realise that the write-side has completely different needs from the read-side, and separating those concerns into datastores that are optimised for either side makes it possible to offer the best experience for the write and read sides independently.
+When building systems using Event sourcing and CQRS ([Command & Query Responsibility Segregation](https://msdn.microsoft.com/en-us/library/jj554200.aspx)) techniques it is tremendously important to realise that the write-side has completely different needs from the read-side, and separating those concerns into datastores that are optimised for either side makes it possible to offer the best experience for the write and read sides independently.
 
 For example, in a bidding system it is important to "take the write" and respond to the bidder that we have accepted the bid as soon as possible, which means that write-throughput is of highest importance for the write-side – often this means that data stores which are able to scale to accommodate these requirements have a less expressive query side.
 
@@ -237,7 +237,7 @@ ISubscriber<IImmutableList<object>> dbBatchWriter =
 // Using an example (Reactive Streams) Database driver
 readJournal
   .EventsByPersistenceId("user-1337")
-  .Select(envelope => envelope.event)
+  .Select(envelope => envelope.Event)
   .Select(ConvertToReadSideTypes) // convert to datatype
   .Grouped(20) // batch inserts into groups of 20
   .RunWith(Sink.FromSubscriber(dbBatchWriter), mat); // write batches to read-side database
@@ -273,7 +273,7 @@ Sometimes you may need to implement "resumable" projections, that will not start
 The example below additionally highlights how you would use Actors to implement the write side, in case you need to do some complex logic that would be best handled inside an Actor before persisting the event into the other datastore:
 
 ```csharp
-var timeout = Timeout(3.seconds);
+var timeout = new Timeout(TimeSpan.FromSeconds(3));
  
 var bidProjection = new MyResumableProjection("bid");
  
@@ -282,7 +282,7 @@ var writer = system.ActorOf(writerProps, "bid-projection-writer");
  
 readJournal
   .EventsByTag("bid", bidProjection.LatestOffset ?? 0L)
-  .SelectAsync(8, envelope => writer.Ask(envelope.event, timeout).ContinueWith(t => envelope.offset, TaskContinuationOptions.OnlyOnRanToCompletion))
+  .SelectAsync(8, envelope => writer.Ask(envelope.Event, timeout).ContinueWith(t => envelope.Offset, TaskContinuationOptions.OnlyOnRanToCompletion))
   .SelectAsync(1, offset => bidProjection.saveProgress(offset))
   .RunWith(Sink.Ignore<object>(), mat);
 

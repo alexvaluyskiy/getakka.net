@@ -34,10 +34,11 @@ title: Akka.NET Documentation
 
 ### Working with Actors
 - [Creating actors](working-with-actors/creating-actors)
-- [Actor API](working-with-actors/actor-lifecycle)
+- [UntypedActor API](working-with-actors/Actor lifecycle)
+- [ReceiveActor API](ReceiveActor)
+- [F# Actor's API](FSharp API)
 - [Identifying Actors via Actor Selection](working-with-actors/identifying-actors-via-actor-selection)
-- [Handling Messages](working-with-actors/handling-messages)
-- [Sending Messages](working-with-actors/sending-messages)
+- [Actor messages](working-with-actors/sending-messages)
 - [Receive timeout](Receive timeout)
 - [Stopping Actors](working-with-actors/stopping-actors)
 - [Switchable Behaviors](working-with-actors/Switchable Behaviors)
@@ -45,11 +46,7 @@ title: Akka.NET Documentation
 - [Initialization patterns](working-with-actors/initialization-patterns)
 
 ### Actors
-- [Working with actors](Working with actors)
-- [F# API](FSharp API)
-- [ReceiveActors](ReceiveActor)
 - [Finite State Machines](FSM)
-- [Persistence](Persistence)
 - [Fault Tolerance](Fault tolerance)
 - [Dispatchers](working-with-actors/Dispatchers)
 - [Mailboxes](working-with-actors/Mailbox)
